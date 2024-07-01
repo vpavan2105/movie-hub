@@ -21,3 +21,5 @@ const showtimeModel = mongoose.model('showtime', showtimeSchema);
 module.exports = {
     showtimeModel
 }
+
+
