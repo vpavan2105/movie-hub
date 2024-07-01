@@ -11,26 +11,39 @@ require('dotenv').config();
 const saltRounds = 10;
 
 userRouter.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const {email, password} = req.body;
-    const isUserExists = UserModel.findOne({email});
-    if( isUserExists ) {
-      const passwordCheck = await  bcrypt.compare(password,isUserExists.password)
-      if( !passwordCheck ) return res.status(statusCode.BadRequest).json({ error : true, payload : 'Invalid Password'});
-      const token = jwt.sign({user_id : isUserExists._id},process.env.PRIVATE_KEY,{ expiresIn: '1h' })  
-      return res.status(statusCode.Success).json({
-        error : false,
-        payload : token
-      })
-    }
-    return res.status(statusCode.BadRequest).json({ error : true, payload : 'User not found' });
+    // Retrieve the user from the database
+    const isUserExists = await UserModel.findOne({ email });
     
-  } catch (error) {
-    console.log("error while loging user: " + error);
-    res.status(statusCode.InternalError).json({
-      error: true,
-      payload: "Internal Server Error",
+    // Check if the user exists
+    if (!isUserExists) {
+      return res.status(statusCode.BadRequest).json({ error: true, payload: 'User not found' });
+    }
+
+    const passwordCheck = await bcrypt.compare(password, isUserExists.password);
+   
+    if (!passwordCheck) {
+      return res.status(statusCode.BadRequest).json({ error: true, payload: 'Invalid Password' });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { user_id: isUserExists._id },
+      process.env.PRIVATE_KEY,
+      { expiresIn: '1h' }
+    );
+
+    // Return the token in the response
+    return res.status(statusCode.Success).json({
+      error: false,
+      payload: token,
     });
+
+  } catch (err) {
+    console.error('Error while logging in user:', err);
+    return res.status(statusCode.BadRequest).json({ error: true, payload: 'An error occurred' });
   }
 });
 
@@ -43,16 +56,15 @@ userRouter.post("/register", async (req, res) => {
             payload : error
         })
     }
-    bcrypt.hash(req.body.password, saltRounds, (err, result) => {
+    bcrypt.hash(req.body.password, saltRounds, async (err, result) => {
         if(err) throw new Error(err)
-         
-        req.body.password = result;  
-    })
-    const user = UserModel.create(value);
-    await user.save()
-    return res.status(statusCode.Success).json({
-        error : false,
-        payload : `${user.username} successfully created`
+       
+        const user = new UserModel({...value,password:result});
+        await user.save()
+        return res.status(statusCode.Success).json({
+            error : false,
+            payload : `${user.username} successfully created`
+        })
     })
   } catch (error) {
     console.log("error while registering user: " + error);
