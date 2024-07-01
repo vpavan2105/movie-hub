@@ -14,10 +14,9 @@ userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Retrieve the user from the database
+
     const isUserExists = await UserModel.findOne({ email });
-    
-    // Check if the user exists
+
     if (!isUserExists) {
       return res.status(statusCode.BadRequest).json({ error: true, payload: 'User not found' });
     }
@@ -28,14 +27,13 @@ userRouter.post("/login", async (req, res) => {
       return res.status(statusCode.BadRequest).json({ error: true, payload: 'Invalid Password' });
     }
 
-    // Generate a JWT token
     const token = jwt.sign(
       { user_id: isUserExists._id },
       process.env.PRIVATE_KEY,
       { expiresIn: '1h' }
     );
 
-    // Return the token in the response
+
     return res.status(statusCode.Success).json({
       error: false,
       payload: token,
@@ -76,6 +74,30 @@ userRouter.post("/register", async (req, res) => {
 });
 userRouter.patch("/:id", auth, access("user"), async (req, res) => {
   try {
+      const {id} = req.params;
+      let updateUserDetails ;
+      if(req.body?.password) {
+        const user = UserModel.findById(id);
+        isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+        if(!isPasswordValid) return res.status(statusCode.InvalidData).json({
+          error : true,
+          payload : 'Incorrect password'
+        })
+        bcrypt.hash(req.body.newPassword, saltRounds, async (err, result) => {
+          if(err) throw new Error(err)
+         
+          req.body.password = result
+          delete req.body.newPassword
+          updateUserDetails = UserModel.findByIdAndUpdate({id},{...req.body}, { new: true } )
+      })
+      }else{
+        updateUserDetails = UserModel.findByIdAndUpdate({id},{...req.body}, { new: true } )
+      }
+     return res.status(statusCode.Created).json({
+      error : false,
+      payload : updateUserDetails
+     })
+
   } catch (error) {
     console.log("error while updating user: " + error);
     res.status(statusCode.InternalError).json({
