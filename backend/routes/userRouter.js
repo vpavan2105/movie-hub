@@ -7,6 +7,7 @@ const { createUserSchema } = require("../utils/validate");
 const { UserModel } = require("../models/userModel");
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+require('dotenv').config();
 const saltRounds = 10;
 
 userRouter.post("/login", async (req, res) => {
@@ -16,9 +17,14 @@ userRouter.post("/login", async (req, res) => {
     if( isUserExists ) {
       const passwordCheck = await  bcrypt.compare(password,isUserExists.password)
       if( !passwordCheck ) return res.status(statusCode.BadRequest).json({ error : true, payload : 'Invalid Password'});
-
-
+      const token = jwt.sign({user_id : isUserExists._id},process.env.PRIVATE_KEY,{ expiresIn: '1h' })  
+      return res.status(statusCode.Success).json({
+        error : false,
+        payload : token
+      })
     }
+    return res.status(statusCode.BadRequest).json({ error : true, payload : 'User not found' });
+    
   } catch (error) {
     console.log("error while loging user: " + error);
     res.status(statusCode.InternalError).json({
