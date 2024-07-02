@@ -7,6 +7,7 @@ const { movieRouter } = require('./routes/movieRouter');
 const { theatreRouter } = require('./routes/theatreRouter');
 const { showTimeRouter } = require('./routes/showTimeRouter');
 const { bookingRouter } = require('./routes/bookingRouter');
+
 const port = 3000;
 
 app.use(express.json());

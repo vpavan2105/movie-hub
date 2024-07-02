@@ -10,3 +10,5 @@ const BlackListModel = mongoose.model('blacklist',BlackList_Schema)
 module.exports = {
     BlackListModel
 }
+
+
