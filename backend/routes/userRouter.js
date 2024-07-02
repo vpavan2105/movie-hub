@@ -160,22 +160,22 @@ userRouter.get("/:id", auth, access("admin"), async (req, res) => {
   }
 });
 
-// userRouter.delete("/:id", auth, access("admin", "user"), async (req, res) => {
-//   try {
-//     const user = await UserModel.findByIdAndDelete(req.params.id)
+userRouter.delete("/:id", auth, access("admin", "user"), async (req, res) => {
+  try {
+    const user = await UserModel.findByIdAndDelete(req.params.id)
 
-//     res.status(statusCode.Success).json({
-//       error : false,
-//       payload : `${user.username} your account has been deleted`
-//     })
-//   } catch (error) {
-//     console.log("error while deleting user: " + error);
-//     res.status(statusCode.InternalError).json({
-//       error: true,
-//       payload: "Internal Server Error",
-//     });
-//   }
-// });
+    res.status(statusCode.Success).json({
+      error : false,
+      payload : `${user.username} your account has been deleted`
+    })
+  } catch (error) {
+    console.log("error while deleting user: " + error);
+    res.status(statusCode.InternalError).json({
+      error: true,
+      payload: "Internal Server Error",
+    });
+  }
+});
 
 module.exports = {
   userRouter,
