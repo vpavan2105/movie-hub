@@ -1,57 +1,28 @@
-const express = require('express');
+const express = require("express");
 const movieRouter = express.Router();
-const { auth } = require('../middleware/authMiddleware');
-const { access } = require('../middleware/accessMiddleware');
-movieRouter.get('/', (req, res)=>{
-    try{
+const { auth } = require("../middleware/authMiddleware");
+const { access } = require("../middleware/accessMiddleware");
+const {
+  getAllMovieList,
+  getSingleMovie,
+  getMovieDistributorMovie,
+  updateSingleMovie,
+  createMovie,
+  deleteMovie,
+} = require("../controllers/movieController.js");
 
-    }catch(err){
+movieRouter.get("/", getAllMovieList);
 
-    }
-})
+movieRouter.get("/mymovies", auth, access("movie-distributor"), getMovieDistributorMovie);
 
-movieRouter.get('/:id', (req, res) => {
-    try{
+movieRouter.get("/:id", getSingleMovie);
 
-    }catch(err){
+movieRouter.patch("/:id", auth, access("movie-distributor", "admin"), updateSingleMovie);
 
-    }
-})
+movieRouter.post("/:id", auth, access("movie-distributor"), createMovie);
 
-movieRouter.get('/mymovies', auth, access('movie-distributor'), (req, res)=>{
-    try{
-
-    }catch(err){
-
-    }
-})
-
-
-movieRouter.patch('/:id', auth, access('movie-distributor'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-})
-
-movieRouter.post('/:id', auth, access('movie-distributor'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-})
-
-movieRouter.delete('/:id', auth, access('movie-distributor','admin'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-
-})
+movieRouter.delete("/:id", auth, access("movie-distributor"), deleteMovie);
 
 module.exports = {
-    movieRouter
-}
+  movieRouter,
+};
