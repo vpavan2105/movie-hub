@@ -11,6 +11,7 @@ const {
   deleteMovie,
 } = require("../controllers/movieController.js");
 const errorHandler = require("../middleware/errorHandler.js");
+const handleQueryParams = require("../middleware/queryUtillsMiddleware.js");
 
 movieRouter.get("/",handleQueryParams, getAllMovieList);
 

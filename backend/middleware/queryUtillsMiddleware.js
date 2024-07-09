@@ -9,7 +9,7 @@ const handleQueryParams = (req, res, next) => {
         sortOrder: req.query.order === 'asc' ? 1 : -1,
     };
 
-    if (req.role === "theatre-distributor") {
+    if (req.role === "theatre-distributor" || "movie-distributor" ) {
         req.queryOptions.conditions['user_id'] = req.id;
     }
 
