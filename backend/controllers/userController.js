@@ -8,7 +8,7 @@ const { BlackListModel } = require("../models/BlackListModel");
 require('dotenv').config();
 
 const saltRounds = 10;
-const userLogin = async (req, res) => {
+const userLogin = async (req, res, next) => {
     const { email, password } = req.body;
   
     try {
@@ -44,7 +44,7 @@ const userLogin = async (req, res) => {
     }
   }
 
-  const userRegister = async (req, res) => {
+  const userRegister = async (req, res, next) => {
     try {
       const { value, error } = createUserSchema.validate(req.body);
       if (error) {
@@ -68,7 +68,7 @@ const userLogin = async (req, res) => {
   }
 
 
-  const userUpdate = async (req, res) => {
+  const userUpdate = async (req, res, next) => {
     try {
       const { id } = req.params;
       let updateUserDetails;
@@ -103,7 +103,7 @@ const userLogin = async (req, res) => {
 
 
 
-const userLogout = async (req, res) => {
+const userLogout = async (req, res, next) => {
     try {
       const user = UserModel.findOne(req.id);
       const token = req.headers.authorization.split(" ")[1];
@@ -120,7 +120,7 @@ const userLogout = async (req, res) => {
     }
   }
 
-  const userList =  async (req, res) => {
+  const userList =  async (req, res,next) => {
     try {
       const conditions = {};
       
@@ -135,7 +135,7 @@ const userLogout = async (req, res) => {
     }
   }
 
- const userSingle = async (req, res) => {
+ const userSingle = async (req, res,next) => {
     try {
       const user = await UserModel.findById(req.params.id);
       res.status(statusCode.Success).json({error : false, payload : user})
@@ -145,7 +145,7 @@ const userLogout = async (req, res) => {
     }
   }
 
-  const userProfile = async (req, res) => {
+  const userProfile = async (req, res,next) => {
     try {
         const user_id = req.id;
         const userDetails = await UserModel.findById(user_id);
@@ -161,7 +161,7 @@ const userLogout = async (req, res) => {
     }
   }
   
-  const userDelete = async (req, res) => {
+  const userDelete = async (req, res,next) => {
     try {
       const user = await UserModel.findByIdAndDelete(req.params.id)
   
