@@ -1,6 +1,4 @@
 const { BookingModel } = require("../models/BookingModel");
-const { UserModel } = require("../models/userModel");
-const { statusCode } = require("../utils/constants");
 const { statusCode } = require("../utils/constants");
 const { createUserSchema } = require("../utils/validate");
 const { UserModel } = require("../models/userModel");
@@ -41,7 +39,7 @@ const userLogin = async (req, res) => {
   
     } catch (err) {
       console.error('Error while logging in user:', err);
-      return res.status(statusCode.BadRequest).json({ error: true, payload: 'An error occurred' });
+      return res.status(statusCode.BadRequest).json({ error: true, payload: 'Internal Server Error' });
     }
   }
 

@@ -2,56 +2,20 @@ const express = require('express');
 const theatreRouter = express.Router();
 const { auth } = require('../middleware/authMiddleware');
 const { access } = require('../middleware/accessMiddleware');
+const { theatreDelete, theatreUpdate, theatreCreate, theatreList, theatreSingle, theatreDashBoard } = require('../controllers/theatreController');
 
-theatreRouter.get('/', (req, res)=>{
-    try{
+theatreRouter.get('/',theatreList)
 
-    }catch(err){
+theatreRouter.get('/dashboard',auth,access('theatre-distributor'),theatreDashBoard)
 
-    }
-})
+theatreRouter.get('/:id', theatreSingle)
 
-theatreRouter.get('/:id', (req, res) => {
-    try{
+theatreRouter.patch('/:id', auth, access('theatre-distributor','admin'), theatreUpdate)
 
-    }catch(err){
+theatreRouter.post('/:id', auth, access('theatre-distributor'), theatreCreate)
 
-    }
-})
+theatreRouter.delete('/:id', auth, access('theatre-distributor'), theatreDelete)
 
-theatreRouter.get('/mytheatres', auth, access('theatre-distributor'), (req, res)=>{
-    try{
-
-    }catch(err){
-
-    }
-})
-
-
-theatreRouter.patch('/:id', auth, access('theatre-distributor'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-})
-
-theatreRouter.post('/:id', auth, access('theatre-distributor'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-})
-
-theatreRouter.delete('/:id', auth, access('theatre-distributor','admin'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-
-})
 
 module.exports = {
     theatreRouter

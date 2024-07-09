@@ -11,3 +11,9 @@ exports.createUserSchema = Joi.object({
 
 })
 
+exports.createTheatreSchema = Joi.object({
+    name : Joi.string().required(),
+    imgUrl : Joi.array().required(),
+    location : Joi.string().required(),
+    user_id : Joi.string().required(),
+})

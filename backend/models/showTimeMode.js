@@ -16,10 +16,10 @@ const showtimeSchema = new mongoose.Schema({
     status: { type: String, enum: ["pending", "upcoming", "running"] ,default:"pending"}
 });
 
-const showtimeModel = mongoose.model('showtime', showtimeSchema);
+const ShowtimeModel = mongoose.model('showtime', showtimeSchema);
 
 module.exports = {
-    showtimeModel
+    ShowtimeModel
 }
 
 
