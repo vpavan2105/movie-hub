@@ -22,11 +22,8 @@ const getAllMovieList = async (req, res) => {
 
     res.status(statusCode.Success).json({ error: false, payload: movieList });
   } catch (error) {
-    console.log(error,'Error while loading movie');
-    res.status(statusCode.InternalError).json({
-      error: true,
-      payload: "Internal Server Error",
-    });
+
+    next(error)
   }
 };
 
@@ -42,11 +39,9 @@ const getSingleMovie = async (req, res) => {
 
     res.status(statusCode.Success).json({ error: false, payload: movie });
   } catch (error) {
-    console.error("Error fetching movie list:", error);
-    res.status(statusCode.InternalError).json({
-      error: true,
-      payload: "Internal Server Error",
-    });
+
+    next(error)
+
   }
 };
 
@@ -64,10 +59,9 @@ const getMovieDistributorMovie = async (req, res) => {
 
     res.status(statusCode.Success).json({ error: false, payload: movies });
   } catch (error) {
-    console.error("Error fetching movie distributor list:", error);
-    res
-      .status(statusCode.InternalError)
-      .json({ error: true, payload: "Internal Server Error" });
+
+    next(error)
+
   }
 };
 
@@ -112,10 +106,9 @@ const updateSingleMovie = async (req, res) => {
 
     res.status(statusCode.Success).json({ error: false, payload: updatedMovie });
   } catch (error) {
-    console.error("Error updating movie:", error);
-    res
-      .status(statusCode.InternalError)
-      .json({ error: true, payload: "Internal Server Error" });
+
+    next(error)
+
   }
 };
 
@@ -143,10 +136,9 @@ const createMovie = async (req, res) => {
 
     res.status(statusCode.Success).json({ error: false, payload: newMovie });
   } catch (error) {
-    console.error("Error creating movie:", error);
-    res
-      .status(statusCode.InternalError)
-      .json({ error: true, payload: "Internal Server Error" });
+
+    next(error)
+    
   }
 };
 
@@ -182,12 +174,12 @@ const deleteMovie = async (req, res) => {
       .status(statusCode.Success)
       .json({ error: false, payload: "Movie deleted successfully" });
   } catch (error) {
-    console.error("Error deleting movie:", error);
-    res
-      .status(statusCode.InternalError)
-      .json({ error: true, payload: "Internal Server Error" });
+
+    next(error)
   }
 };
+
+
 
 module.exports = {
   getAllMovieList,

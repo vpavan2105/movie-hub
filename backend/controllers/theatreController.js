@@ -34,10 +34,8 @@ const theatreDashBoard = async (req, res) => {
         })
         
     } catch (error) {
-        res.status(statusCode.InternalError).json({
-            error : true,
-            payload : 'Internal Server Error'
-        })
+        
+        next(error)
     }
 }
 
@@ -50,10 +48,8 @@ const theatreSingle = async (req, res) => {
             payload : theatre
         })
     } catch (error) {
-        res.status(statusCode.InternalError).json({
-            error : true,
-            payload : 'Internal Server Error'
-        })
+
+        next(error)
     }
 }
 
@@ -72,10 +68,8 @@ const theatreCreate = (req, res) => {
             payload : `${theatre.name} successfully created`
         })
     } catch (error) {
-        res.status(statusCode.InternalError).json({
-            error : true,
-            payload : 'Internal Server Error'
-        })
+
+        next(error)
     }
 }
 
@@ -97,10 +91,7 @@ const theatreUpdate = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(statusCode.InternalError).json({
-            error : true,
-            payload : 'Internal Server Error'
-        })
+        next(error)
     }
 }
 
@@ -118,10 +109,7 @@ const theatreDelete = async (req, res) => {
         })
         
     } catch (error) {
-        res.status(statusCode.InternalError).json({
-            error : true,
-            payload : 'Internal Server Error'
-      })
+        next(error)
     }
 }
 

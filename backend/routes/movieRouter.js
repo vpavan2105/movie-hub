@@ -12,7 +12,7 @@ const {
 } = require("../controllers/movieController.js");
 const errorHandler = require("../middleware/errorHandler.js");
 
-movieRouter.get("/", getAllMovieList);
+movieRouter.get("/",handleQueryParams, getAllMovieList);
 
 movieRouter.get("/mymovies", auth, access("movie-distributor"), getMovieDistributorMovie);
 

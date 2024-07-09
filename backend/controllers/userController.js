@@ -37,9 +37,10 @@ const userLogin = async (req, res) => {
         payload: token,
       });
   
-    } catch (err) {
-      console.error('Error while logging in user:', err);
-      return res.status(statusCode.BadRequest).json({ error: true, payload: 'Internal Server Error' });
+    } catch (error) {
+      
+       next(error)
+
     }
   }
 
@@ -60,12 +61,9 @@ const userLogin = async (req, res) => {
         error: false,
         payload: `${user.username} successfully created`
       });
-    } catch (err) {
-      console.log("Error while registering user: " + err);
-      return res.status(statusCode.InternalError).json({
-        error: true,
-        payload: "Internal Server Error"
-      });
+    } catch (error) {
+     
+         next(error)
     }
   }
 
@@ -97,12 +95,9 @@ const userLogin = async (req, res) => {
         error: false,
         payload: updateUserDetails
       });
-    } catch (err) {
-      console.log("Error while updating user: " + err);
-      return res.status(statusCode.InternalError).json({
-        error: true,
-        payload: "Internal Server Error"
-      });
+    } catch (error) {
+      
+        next(error)
     }
   }
 
@@ -120,11 +115,8 @@ const userLogout = async (req, res) => {
       })
   
     } catch (error) {
-      console.log("error while logout user: " + error);
-      res.status(statusCode.InternalError).json({
-        error: true,
-        payload: "Internal Server Error",
-      });
+     
+         next(error)
     }
   }
 
@@ -138,11 +130,8 @@ const userLogout = async (req, res) => {
         payload : users
       })
     } catch (error) {
-      console.log("error while getting all user: " + error);
-      res.status(statusCode.InternalError).json({
-        error: true,
-        payload: "Internal Server Error",
-      });
+      
+       next(error)
     }
   }
 
@@ -151,11 +140,8 @@ const userLogout = async (req, res) => {
       const user = await UserModel.findById(req.params.id);
       res.status(statusCode.Success).json({error : false, payload : user})
     } catch (error) {
-      console.log("error while getting single user: " + error);
-      res.status(statusCode.InternalError).json({
-        error: true,
-        payload: "Internal Server Error",
-      });
+     
+       next(error)
     }
   }
 
@@ -170,11 +156,8 @@ const userLogout = async (req, res) => {
         })
         
     } catch (error) {
-        console.log("error while getting user profile: " + error);
-        res.status(statusCode.InternalError).json({
-            error : true,
-            payload: "Internal Server Error",
-        })
+        
+        next(error)
     }
   }
   
@@ -187,11 +170,8 @@ const userLogout = async (req, res) => {
         payload : `${user.username} your account has been deleted`
       })
     } catch (error) {
-      console.log("error while deleting user: " + error);
-      res.status(statusCode.InternalError).json({
-        error: true,
-        payload: "Internal Server Error",
-      });
+      
+         next(error)
     }
   }
 
