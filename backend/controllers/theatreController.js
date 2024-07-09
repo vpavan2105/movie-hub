@@ -5,24 +5,20 @@ const { statusCode } = require("../utils/constants");
 const { createTheatreSchema } = require("../utils/validate");
 
 
-const theatreList = async (req, res) => {
+const theatreList = async (req, res, next) => {
     try {
-        const conditions = {};
-        if(req.role === "theatre-distributor") {
-            conditions[user_id] = req.id;
-        }
-        const threatreList = await TheatreModel.find(conditions);
+        const { conditions, page, limit, sortField, sortOrder } = req.queryOptions;
+        const skip = (page - 1) * limit;
+       const threatreList = await TheatreModel.find(conditions).sort({[sortField]:sortOrder}).skip(skip).limit(limit);
+       const total = await TheatreModel.countDocuments(conditions);
         res.status(statusCode.Success).json({
             error : false,
-            payload : threatreList
+            payload : threatreList,page,limit,total
         })
 
-        
     } catch (error) {
-        res.status(statusCode.InternalError).json({
-            error : true,
-            payload : 'Internal Server Error'
-        })
+
+        next(error)
     }
 }
 

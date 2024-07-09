@@ -10,6 +10,7 @@ const {
   createMovie,
   deleteMovie,
 } = require("../controllers/movieController.js");
+const errorHandler = require("../middleware/errorHandler.js");
 
 movieRouter.get("/", getAllMovieList);
 
@@ -22,6 +23,8 @@ movieRouter.patch("/:id", auth, access("movie-distributor", "admin"), updateSing
 movieRouter.post("/:id", auth, access("movie-distributor"), createMovie);
 
 movieRouter.delete("/:id", auth, access("movie-distributor"), deleteMovie);
+
+movieRouter.use(errorHandler);
 
 module.exports = {
   movieRouter,

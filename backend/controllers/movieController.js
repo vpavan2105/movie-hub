@@ -4,6 +4,13 @@ const { statusCode } = require("../utils/constants.js");
 
 const getAllMovieList = async (req, res) => {
   try {
+    const condition = {}
+    if(req.query){ 
+      Object.keys(req.query).forEach(value => {
+        condition[value] = req.query[value]
+      })
+  }
+    console.log(condition);
     const movieList = await MovieModel.find();
 
     if (!movieList.length) {
@@ -15,6 +22,7 @@ const getAllMovieList = async (req, res) => {
 
     res.status(statusCode.Success).json({ error: false, payload: movieList });
   } catch (error) {
+    console.log(error,'Error while loading movie');
     res.status(statusCode.InternalError).json({
       error: true,
       payload: "Internal Server Error",
