@@ -22,7 +22,7 @@ const theatreList = async (req, res, next) => {
     }
 }
 
-const theatreDashBoard = async (req, res) => {
+const theatreDashBoard = async (req, res, next) => {
     try {
         const id = req.id;
         const theatres = await TheatreModel.find({user_id : id});
@@ -39,7 +39,7 @@ const theatreDashBoard = async (req, res) => {
     }
 }
 
-const theatreSingle = async (req, res) => {
+const theatreSingle = async (req, res, next) => {
     try {
         const {id} = req.params;
         const theatre = await TheatreModel.findById(id);
@@ -53,7 +53,7 @@ const theatreSingle = async (req, res) => {
     }
 }
 
-const theatreCreate = (req, res) => {
+const theatreCreate = (req, res, next) => {
     try {
         req.body[id] = req.id;
         const {value,error} = createTheatreSchema.validate(req.body)
@@ -73,7 +73,7 @@ const theatreCreate = (req, res) => {
     }
 }
 
-const theatreUpdate = async (req, res) => {
+const theatreUpdate = async (req, res, next ) => {
     try {
         const {id} = req.params
         const theatre = await findById(id);
@@ -96,7 +96,7 @@ const theatreUpdate = async (req, res) => {
 }
 
 
-const theatreDelete = async (req, res) => {
+const theatreDelete = async (req, res, next) => {
     try {
         const {id} = req.params
         const theatre = await findById(id);

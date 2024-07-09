@@ -2,42 +2,20 @@ const express = require('express');
 const showTimeRouter = express.Router();
 const { auth } = require('../middleware/authMiddleware');
 const { access } = require('../middleware/accessMiddleware');
+const handleQueryParams = require('../middleware/queryUtillsMiddleware');
+const errorHandler = require('../middleware/errorHandler');
+const { showTimesList } = require('../controllers/showTimeController');
 
-showTimeRouter.get('/', auth, (req, res) => {
-    try{
+showTimeRouter.get('/', handleQueryParams,showTimesList)
+showTimeRouter.get('/myshows', auth, access('threatre-distributor','movie-distributor'), )
 
-    }catch(err){
+showTimeRouter.post('/', auth, access('threatre-distributor'),)
 
-    }
-})
-showTimeRouter.get('/myshows', auth, access('threatre-distributor','movie-distributor'), (req, res) => {
-    try{
+showTimeRouter.patch('/', auth, access('threatre-distributor'), )
 
-    }catch(err){
+showTimeRouter.delete('/', auth, access('threatre-distributor'),)
 
-    }
-})
-
-showTimeRouter.post('/', auth, access('threatre-distributor'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-})
-
-showTimeRouter.patch('/', auth, access('threatre-distributor'), (req, res) => {
-    try{
-
-    }catch(err){
-
-    }
-
-})
-
-showTimeRouter.delete('/', auth, access('threatre-distributor'), (req, res) =>{
-
-})
+showTimeRouter.use(errorHandler)
 
 module.exports = {
     showTimeRouter

@@ -2,32 +2,24 @@ const express = require("express");
 const { MovieModel } = require("../models/movieModel.js");
 const { statusCode } = require("../utils/constants.js");
 
-const getAllMovieList = async (req, res) => {
+const getAllMovieList = async (req, res,next) => {
   try {
-    const condition = {}
-    if(req.query){ 
-      Object.keys(req.query).forEach(value => {
-        condition[value] = req.query[value]
-      })
-  }
-    console.log(condition);
-    const movieList = await MovieModel.find();
+    const { conditions, page, limit, sortField, sortOrder } = req.queryOptions;
+    const skip = (page - 1) * limit;
+   const movieList = await MovieModel.find(conditions).sort({[sortField]:sortOrder}).skip(skip).limit(limit);
+   const total = await MovieModel.countDocuments(conditions);
+    res.status(statusCode.Success).json({
+        error : false,
+        payload : movieList,page,limit,total
+    })
 
-    if (!movieList.length) {
-      return res.status(statusCode.NotFound).json({
-        error: true,
-        payload: "No movie found",
-      });
-    }
-
-    res.status(statusCode.Success).json({ error: false, payload: movieList });
-  } catch (error) {
+} catch (error) {
 
     next(error)
   }
 };
 
-const getSingleMovie = async (req, res) => {
+const getSingleMovie = async (req, res,next) => {
   try {
     const { id } = req.params;
     if (!id) {
@@ -45,7 +37,7 @@ const getSingleMovie = async (req, res) => {
   }
 };
 
-const getMovieDistributorMovie = async (req, res) => {
+const getMovieDistributorMovie = async (req, res,next) => {
   try {
     const id = req?.id;
 
@@ -65,7 +57,7 @@ const getMovieDistributorMovie = async (req, res) => {
   }
 };
 
-const updateSingleMovie = async (req, res) => {
+const updateSingleMovie = async (req, res, next) => {
   try {
     const userId = req?.id;
     const movieId = req.params.id;
@@ -112,7 +104,7 @@ const updateSingleMovie = async (req, res) => {
   }
 };
 
-const createMovie = async (req, res) => {
+const createMovie = async (req, res,next) => {
   try {
     const userId = req?.id;
     const movieData = req.body;
@@ -142,7 +134,7 @@ const createMovie = async (req, res) => {
   }
 };
 
-const deleteMovie = async (req, res) => {
+const deleteMovie = async (req, res,next) => {
   try {
     const userId = req?.id;
     const movieId = req.params.id;
